@@ -1,0 +1,16 @@
+{
+    "name": "masoud/app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "app": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Masoud",
+            "email": "nickparvar.m@gmail.com"
+        }
+    ],
+    "require": {}
+}

@@ -1,10 +1,21 @@
 <?php
 
-$host = "localhost";
-$dbname = "password_manager";
-$username = "root";
-$password = "";
-$tableName = "passwords";
+class Database{
+    private $host = "localhost";
+    private $dbname = "password_manager";
+    private $username = "root";
+    private $password = "";
+    private static $conn;
+
+    function __construct()
+    {
+        
+    }
+
+}
+
+
+
 
 
 try {
