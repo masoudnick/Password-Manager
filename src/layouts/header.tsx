@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 const Header = () => {
     const [value, setValue] = useState<string>("");
-    const { t} = useTranslation();
+    const { t } = useTranslation();
   return (
     <header className="mb-5">
       <label

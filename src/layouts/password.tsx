@@ -1,6 +1,6 @@
 import { ArrowLeft02Icon } from "hugeicons-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Input, Modal } from "../components";
+import { Input, Loading, Modal } from "../components";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -21,9 +21,15 @@ type Password = {
 
 const Paswword = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [alert, showAlert] = useState<AlertProps>({
+  const [alert, showAlert] = useState<{message: string}>({
     message: "",
   });
+  
+  const [loading, setLoading] = useState<{[key: string]: boolean}>({
+      modal: false,
+      password: false,
+    });
+
   const [password, setPassword] = useState<Password>({
     id: 0,
     username: "",
@@ -43,6 +49,7 @@ const Paswword = () => {
   } = useForm<Inputs>({ mode: "onTouched" });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    setLoading((prev) => ({ ...prev, modal: true }));
     fetch("http://localhost/password-manager/api.php?id=" + location.state.id, {
       method: "PUT",
       headers: {
@@ -51,12 +58,19 @@ const Paswword = () => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log("Success:", data);
+      .then((res) => {
+        setLoading((prev) => ({ ...prev, modal: false }));
         setIsOpen(false);
+        if (res.status === 200) {
+          showAlert({ message: t("passwordEdited") });
+        }
+        else{
+          showAlert({ message: t("error") });
+        }
+        
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .catch(() => {
+        showAlert({ message: t("error") });
       });
   };
 
@@ -76,8 +90,15 @@ const Paswword = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        fetchPassword();
+      .then((res) => {
+        if (res.status === 200) {
+          showAlert({ message: t("passwordDeleted") });
+          fetchPassword();
+        }
+        else{
+          showAlert({ message: t("error") });
+        }
+
       })
       .catch(() => {
         showAlert({ message: t("error") });
@@ -90,13 +111,12 @@ const Paswword = () => {
     setValue("password", password.password);
   }, [isOpen]);
 
-  const back = () => navigate(-1);
 
   return (
     <main>
       <section className="flex mb-9 items-center flex-row-reverse justify-start">
         <ArrowLeft02Icon
-          onClick={back}
+          onClick={() => navigate(-1)}
           className="p-1 cursor-pointer rounded-full ms-1.5 hover:bg-[var(--color-hover)]"
           size={"30px"}
           strokeWidth="2"
@@ -159,11 +179,14 @@ const Paswword = () => {
           />
           <div className="flex gap-x-2 mt-2">
             <button
-              className="btn px-4 py-2 rounded"
+              className="btn px-4 py-2 rounded flex items-center"
               type="submit"
-              disabled={errors.username || errors.password ? true : false}
+              disabled={errors.username || errors.password || loading.modal ? true : false}
             >
               {t("save")}
+              {loading.modal ? (
+                <Loading className="mr-2 text-white size-4" />
+              ) : null}
             </button>
             <button
               className="btn px-4 py-2 rounded"
@@ -174,7 +197,7 @@ const Paswword = () => {
           </div>
         </form>
       </Modal>
-      {alert.message && <Alert message={alert.message} />}
+      <Alert message={alert.message} setMessage={showAlert} />
     </main>
   );
 };

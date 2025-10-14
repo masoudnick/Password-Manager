@@ -1,8 +1,8 @@
 import { ArrowLeft01Icon } from "hugeicons-react";
 import { useTranslation } from "react-i18next";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { Modal, Input, Loading, Alert, AlertProps } from "../components";
+import { useEffect, useState, useEffectEvent, Activity } from "react";
+import { Modal, Input, Loading, Alert } from "../components";
 import { Link } from "react-router-dom";
 import { clsx } from "clsx";
 import { getRootDomain } from "../utilities";
@@ -21,20 +21,18 @@ type Password = {
   icon: string;
 };
 
-type LoadingProps = {
-  [key: string]: boolean;
-};
-
 const Main = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<LoadingProps>({
+  const [loading, setLoading] = useState<{ [key: string]: boolean }>({
     modal: false,
     password: false,
   });
-  const [alert, showAlert] = useState<AlertProps>({
+
+  const [alert, showAlert] = useState<{ message: string }>({
     message: "",
   });
+
   const [passwords, setPasswords] = useState<Password[]>([]);
 
   const {
@@ -48,8 +46,7 @@ const Main = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    setLoading((prev) => ({ ...prev, ["modal"]: true }));
-
+    setLoading((prev) => ({ ...prev, modal: true }));
     fetch("http://localhost/password-manager/api.php", {
       method: "POST",
       headers: {
@@ -58,44 +55,56 @@ const Main = () => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then(() => {
-        setLoading((prev) => ({ ...prev, modal: false }));
-        fetchPasswords();
-        setIsOpen(false);
+      .then((res) => {
+        if (res.status === 200) {
+          showAlert({ message: t("passwordSaved") });
+          setLoading((prev) => ({ ...prev, modal: false }));
+          fetchPasswords();
+          setIsOpen(false);
+        } else {
+          showAlert({ message: t("error") });
+        }
       })
       .catch(() => {
         showAlert({ message: t("error") });
       });
   };
 
-  const fetchPasswords = async () => {
+  const fetchPasswords = useEffectEvent(async ()=> {
     setLoading((prev) => ({ ...prev, ["password"]: true }));
-    fetch("http://localhost/password-manager/api.php")
-      .then((res) => res.json())
-      .then(async (res) => {
-        if (res.status !== 200) showAlert({ message: t("error") });
+    try {
+      fetch("http://localhost/password-manager/api.php")
+        .then((res) => res.json())
+        .then(async (res) => {
+          if (res.status !== 200) throw new Error(t("error"));
+  
+          const passwords = await Promise.all(
+            res.data.map(async (item: Password) => {
+              try {
+                const rootDomain = getRootDomain(item.site);
+                const response = await fetch(
+                  `https://favicone.com/${rootDomain}?s=32&json`
+                );
+                const favicon = await response.json();
+                return { ...item, icon: response.ok ? favicon.icon : "" };
+              } catch {
+                return { ...item, icon: "" };
+              }
+            })
+          );
+          setPasswords(passwords);
+        })
+        .catch(() => {
+          showAlert({ message: t("error") });
+        });
+    } catch (error) {
+      showAlert({ message: error });
+    }
+    finally{
+      setLoading((prev) => ({ ...prev, ["password"]: false }));
+    }
+  });
 
-        const passwords = await Promise.all(
-          res.data.map(async (item: Password) => {
-            try {
-              const rootDomain = getRootDomain(item.site);              
-              const response = await fetch(
-                `https://favicone.com/${rootDomain}?s=32&json`
-              );
-              const favicon = await response.json();
-              return { ...item, icon: response.ok ? favicon.icon : "" };
-            } catch {
-              return { ...item, icon: "" };
-            }
-          })
-        );
-        setPasswords(passwords);
-        setLoading((prev) => ({ ...prev, ["password"]: false }));
-      })
-      .catch(() => {
-        showAlert({ message: t("error") });
-      });
-  };
 
   useEffect(() => {
     fetchPasswords();
@@ -226,7 +235,14 @@ const Main = () => {
           </div>
         </form>
       </Modal>
-      {alert.message && <Alert message={alert.message} />}
+      <Activity mode={alert.message ? 'visible' : 'hidden'}>
+      <Alert
+          message={alert.message}
+          onClose={() => {
+            showAlert({ message: "" });
+          }}
+        />
+      </Activity>
     </main>
   );
 };

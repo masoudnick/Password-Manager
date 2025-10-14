@@ -21,7 +21,10 @@ const resources = {
       requiredUsername: "Pick a username for us!",
       requiredPassword: "Don’t forget to enter your password!",
       noPassword: "Your password list is currently empty!",
-      error: "Something went wrong! Please try again."
+      error: "Something went wrong! Please try again.",
+      passwordSaved: "Password saved successfully.",
+      passwordEdited: "Password edited successfully.",
+      passwordDeleted: "Password deleted successfully.",
     },
   },
   fa: {
@@ -43,8 +46,10 @@ const resources = {
       requiredUsername: "یه نام کاربری برامون بنویس",
       requiredPassword: "یادت نره گذرواژه‌تو وارد کنی",
       noPassword: "لیست گذرواژه‌هات فعلاً خالیه!",
-      error: "مشکلی پیش آمده است! لطفاً دوباره تلاش کنید."
-
+      error: "مشکلی پیش آمده است! لطفاً دوباره تلاش کنید.",
+      passwordSaved: "رمز عبور با موفقیت ذخیره شد.",
+      passwordEdited: "رمز عبور با موفقیت ویرایش شد.",
+      passwordDeleted: "رمز عبور با موفقیت حذف شد."
     },
   },
 };

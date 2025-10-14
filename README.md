@@ -1,22 +1,22 @@
-# Password Manager
+# Password Manager App 🔒
 
-A secure and user-friendly password manager built with React. This application allows users to store, manage, and retrieve their passwords securely.
+A secure and user-friendly password manager built with React, TailwindCSS, PHP, and MySQL. This application allows users to store, manage, and retrieve their passwords securely.
 
 ## Features
 
 - **Secure Storage**: Encrypts passwords for secure storage.
 - **User Authentication**: Login and registration functionality to protect user data.
-- **Password Generator**: Built-in tool to generate strong passwords.
-- **Search Functionality**: Quickly find saved passwords.
-- **Responsive Design**: Works seamlessly on desktop and mobile devices.
+- Password data stored in MySQL database
+- Backend API built with PHP
+- Clean UI with TailwindCSS
 
 ## Technologies Used
 
 - **Frontend**: React, React Router, Context API
-- **Styling**: CSS/SCSS or TailwindCSS (specify what you're using)
+- **Styling**: SCSS & TailwindCSS
 - **Backend**: PHP
 - **Database**: MySQL
-- **Encryption**: bcrypt or crypto-js (specify what you're using)
+- **Encryption**: bcrypt
 
 ## Installation
 
@@ -24,3 +24,5 @@ A secure and user-friendly password manager built with React. This application a
    ```bash
    git clone https://github.com/your-username/password-manager.git
    cd password-manager
+   npm install
+   npm run dev

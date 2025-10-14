@@ -1,8 +1,10 @@
 import { FieldError } from "react-hook-form";
 import { ViewIcon, ViewOffSlashIcon, Copy01Icon } from "hugeicons-react";
 import { useState, useRef } from "react";
+import { Alert } from "../Alert";
 import clsx from "clsx";
 import "./style.scss";
+import { useTranslation } from "react-i18next";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -14,6 +16,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = ({ label, error, type, readOnly, ...props }: InputProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { t } = useTranslation();
+  const [alert, showAlert] = useState<{ message: string; show: boolean }>({
+    message: "",
+    show: false,
+  });
   const inputRef = useRef<HTMLInputElement>(null);
 
   const showHidePassword = () => setShowPassword((prev) => !prev);
@@ -21,6 +28,7 @@ const Input = ({ label, error, type, readOnly, ...props }: InputProps) => {
   const copyToClipboard = () => {
     if (inputRef.current) {
       navigator.clipboard.writeText(inputRef.current.value);
+      showAlert({ message: t("error"), show: true });
     }
   };
 
@@ -36,7 +44,9 @@ const Input = ({ label, error, type, readOnly, ...props }: InputProps) => {
       >
         <input
           className="form-control text-xs relative py-2.5 w-full placeholder:text-[#e3e3e3]"
-          type={type === "password" ?  showPassword ? "text" : "password" : type}
+          type={
+            type === "password" ? (showPassword ? "text" : "password") : type
+          }
           autoComplete="off"
           readOnly={readOnly}
           ref={inputRef}
@@ -71,15 +81,12 @@ const Input = ({ label, error, type, readOnly, ...props }: InputProps) => {
             type="button"
             onClick={copyToClipboard}
           >
-            <Copy01Icon
-                className="p-1"
-                size={"26px"}
-                strokeWidth="2"
-              />
+            <Copy01Icon className="p-1" size={"26px"} strokeWidth="2" />
           </button>
         ) : null}
       </div>
       {error && <p className="mt-1 text-red-400 text-xs">{error.message}</p>}
+      {alert.show && <Alert alert={alert.message} />}
     </div>
   );
 };
