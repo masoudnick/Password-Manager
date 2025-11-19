@@ -1,7 +1,7 @@
 import { ArrowLeft01Icon } from "hugeicons-react";
 import { useTranslation } from "react-i18next";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useState, useEffectEvent, Activity } from "react";
+import { useEffect, useState, useEffectEvent } from "react";
 import { Modal, Input, Loading, Alert } from "../components";
 import { Link } from "react-router-dom";
 import { clsx } from "clsx";
@@ -12,6 +12,7 @@ type Inputs = {
   password: string;
   site: string;
 };
+
 
 type Password = {
   id: number;
@@ -70,14 +71,14 @@ const Main = () => {
       });
   };
 
-  const fetchPasswords = useEffectEvent(async ()=> {
+  const fetchPasswords = useEffectEvent(async () => {
     setLoading((prev) => ({ ...prev, ["password"]: true }));
     try {
-      fetch("http://localhost/password-manager/api.php")
+      fetch("http://localhost:3000/api/passwords")
         .then((res) => res.json())
         .then(async (res) => {
-          if (res.status !== 200) throw new Error(t("error"));
-  
+          if (res.status === "error") throw new Error(t("error"));
+
           const passwords = await Promise.all(
             res.data.map(async (item: Password) => {
               try {
@@ -97,14 +98,12 @@ const Main = () => {
         .catch(() => {
           showAlert({ message: t("error") });
         });
-    } catch (error) {
-      showAlert({ message: error });
-    }
-    finally{
+    } catch {
+      showAlert({ message: t("error") });
+    } finally {
       setLoading((prev) => ({ ...prev, ["password"]: false }));
     }
   });
-
 
   useEffect(() => {
     fetchPasswords();
@@ -235,14 +234,9 @@ const Main = () => {
           </div>
         </form>
       </Modal>
-      <Activity mode={alert.message ? 'visible' : 'hidden'}>
-      <Alert
-          message={alert.message}
-          onClose={() => {
-            showAlert({ message: "" });
-          }}
-        />
-      </Activity>
+      {alert.message && (
+        <Alert message={alert.message} setMessage={showAlert} />
+      )}
     </main>
   );
 };

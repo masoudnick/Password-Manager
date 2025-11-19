@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
+      siteTitle: "Password Manager",
       headerSearchPlaceholder: "Search Password ...",
       add: "Add",
       editPassword: "Edit password",
@@ -29,6 +30,7 @@ const resources = {
   },
   fa: {
     translation: {
+    siteTitle: "مدیریت رمزعبور",
     headerSearchPlaceholder: "جستجوی رمز عبور ...",
       add: "افزودن",
       editPassword: "ویرایش رمز عبور",

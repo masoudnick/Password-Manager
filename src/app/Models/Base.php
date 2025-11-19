@@ -1,6 +1,6 @@
 <?php
 
-require_once "../Core/Database.php";
+require_once __DIR__ . "/../Core/Database.php";
 
 class Base {
     protected $pdo;
@@ -9,11 +9,6 @@ class Base {
         $this->pdo = (new Database())->connect();
     }
 }
-
-
-
-
-
 
 
 ?>

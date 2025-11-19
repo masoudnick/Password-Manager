@@ -8,7 +8,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        'sans': ['IranSans'],
+        'sans': ['Vazirmatn'],
         'icon': ['Icomoon']
       }
     },
