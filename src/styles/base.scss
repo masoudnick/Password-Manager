@@ -1,0 +1,36 @@
+body{
+    color: var(--body-text-color);
+    font-size: 13px;
+    background-color: var(--body-bg-color);
+}
+
+.btn {
+    font-weight: 500;
+    outline: 0;
+    cursor: pointer;
+    border: 1px solid var(--element-bg-color);
+    color: var(--body-text-color);
+    border-radius: 6px;
+    transition: 0.4s background-color ease, 0.3s color ease;
+    padding: 6px 15px;
+    line-height: 17px;
+    &:hover{
+        background-color: var(--button-hover-bg-color);
+        color: var(--button-hover-text-color);
+    }
+    &:disabled{
+        pointer-events: none;
+        color: var(--body-text-color);
+        background-color: var(--button-disabled-bg-color);
+        border: 0;
+    }
+}
+
+input{
+    outline: 0;
+    &:focus{
+        // border: 0;
+    }
+}
+
+

@@ -1,0 +1,73 @@
+:root {
+  --switch-width: 54px;
+  --switch-height: 30px;
+  --thumb-size: 22px;
+  --thumb-padding: 4px;
+  --transition-speed: 0.35s;
+  --transition-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
+.form-switch {
+  width: var(--switch-width);
+  height: var(--switch-height);
+}
+.switch-input {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) var(--transition-ease);
+  background-color: var(--element-bg-color);
+  &:checked + .switch-thumb {
+    background: black;
+    transform: translate(
+      calc(var(--switch-width) - var(--thumb-size) - var(--thumb-padding) * 2),
+      -50%
+    );
+  }
+  &:not(:checked) + .switch-thumb .switch-icon-light {
+    opacity: 1;
+    transform: scale(1);
+  }
+  &:checked + .switch-thumb .switch-icon-dark {
+    opacity: 1;
+    transform: scale(1);
+  }
+  &:checked ~ .switch-thumb {
+    background-color: black;
+    transform: translate(26px, -50%);
+  }
+}
+
+.switch-thumb {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform var(--transition-speed) var(--transition-ease), background var(--transition-speed);
+}
+
+.switch-icon {
+  transition: opacity var(--transition-speed), transform var(--transition-speed);
+  position: absolute;
+  width: 100%;
+  height: auto;
+  max-width: 1.2em;
+  max-height: 1.2em;
+  transform: scale(0.4);
+}
+.switch-icon-light {
+  color: black;
+}
+
+.switch-icon-dark {
+  color: white;
+}

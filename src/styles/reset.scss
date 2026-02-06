@@ -1,0 +1,28 @@
+@layer base {
+  html {
+    font-weight: normal;
+    color: var(--body-text-color);
+  }
+  button {
+    cursor: pointer;
+  }
+  input:-webkit-autofill {
+    background-color: transparent;
+  }
+}
+
+* {
+  font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+.stretched-link {
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+  }
+}

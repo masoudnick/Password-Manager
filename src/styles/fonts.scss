@@ -1,0 +1,21 @@
+// @font-face {
+//     font-family: "IranSans";
+//     font-style: normal;
+//     font-weight: normal;
+//     src: url("../assets/fonts/IRANSansWeb.woff") format("woff");
+// }
+
+@font-face {
+    font-family: Vazirmatn;
+    src: url('../assets/fonts/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+@font-face {
+    font-family: "Icomoon";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../assets/fonts/Icomoon.woff") format("woff"), url("../assets/fonts/Icomoon.ttf") format("truetype");
+}

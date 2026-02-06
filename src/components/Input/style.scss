@@ -1,0 +1,43 @@
+.form-control {
+  transform: perspective(1px) translateZ(0);
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    width: 0;
+    background: #2098d1;
+    height: 4px;
+    transition-property: left, right;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+  }
+  &:focus::after {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  &:disabled {
+    border: 0;
+    background-color: transparent;
+    pointer-events: none;
+  }
+  &:read-only {
+    opacity: 0.6;
+  }
+  &:focus:not(:readonly) ~ .focus-border {
+    width: 100%;
+    left: 0;
+}
+}
+.focus-border {
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--input-focus-color);
+  transition: 0.2s;
+}
